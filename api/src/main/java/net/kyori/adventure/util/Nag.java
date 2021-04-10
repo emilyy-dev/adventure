@@ -31,6 +31,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @since 4.7.0
  */
 public abstract class Nag extends RuntimeException {
+  private static final long serialVersionUID = -3480379218596830063L;
+
   /**
    * Prints a nag.
    *
