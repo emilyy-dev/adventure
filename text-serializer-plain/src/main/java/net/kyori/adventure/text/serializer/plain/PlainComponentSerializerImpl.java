@@ -23,37 +23,52 @@
  */
 package net.kyori.adventure.text.serializer.plain;
 
+import java.util.function.Function;
+import net.kyori.adventure.text.KeybindComponent;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static java.util.Objects.requireNonNull;
-
+@Deprecated
 final class PlainComponentSerializerImpl {
+  static final PlainComponentSerializer INSTANCE = new PlainComponentSerializer();
+
+  private PlainComponentSerializerImpl() {
+  }
+
+  static PlainTextComponentSerializer newSerializerForLegacyFunctions(
+    final @Nullable Function<KeybindComponent, String> keybind,
+    final @Nullable Function<TranslatableComponent, String> translatable
+  ) {
+    if(keybind == null && translatable == null) {
+      return PlainTextComponentSerializer.plainText();
+    }
+    final ComponentFlattener.Builder builder = ComponentFlattener.basic().toBuilder();
+    if(keybind != null) builder.mapper(KeybindComponent.class, keybind);
+    if(translatable != null) builder.mapper(TranslatableComponent.class, translatable);
+    return PlainTextComponentSerializer.builder().flattener(builder.build()).build();
+  }
 
   static final class BuilderImpl implements PlainComponentSerializer.Builder {
-    private ComponentFlattener flattener;
+    private final PlainTextComponentSerializer.Builder builder = PlainTextComponentSerializer.builder();
 
     BuilderImpl() {
-      this.flattener = ComponentFlattener.basic().toBuilder()
-        .unknownMapper(comp -> {
-          throw new UnsupportedOperationException("Don't know how to turn " + comp.getClass().getSimpleName() + " into a string");
-        })
-        .build();
     }
 
-    BuilderImpl(final ComponentFlattener flattener) {
-      this.flattener = flattener;
+    BuilderImpl(final PlainComponentSerializer serializer) {
+      this.builder.flattener(((PlainTextComponentSerializerImpl) serializer.serializer).flattener);
     }
 
     @Override
     public PlainComponentSerializer.@NonNull Builder flattener(final @NonNull ComponentFlattener flattener) {
-      this.flattener = requireNonNull(flattener, "flattener");
+      this.builder.flattener(flattener);
       return this;
     }
 
     @Override
     public @NonNull PlainComponentSerializer build() {
-      return new PlainComponentSerializer(this.flattener);
+      return new PlainComponentSerializer(this.builder.build());
     }
   }
 }

@@ -32,6 +32,7 @@ import net.kyori.adventure.text.serializer.ComponentSerializer;
 import net.kyori.adventure.util.Buildable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * A gson component serializer.
@@ -152,5 +153,31 @@ public interface GsonComponentSerializer extends ComponentSerializer<Component, 
      */
     @Override
     @NonNull GsonComponentSerializer build();
+  }
+
+  /**
+   * A {@link GsonComponentSerializer} service provider.
+   *
+   * @since 4.8.0
+   */
+  @ApiStatus.Internal
+  interface Provider {
+    /**
+     * Provides a standard {@link GsonComponentSerializer}.
+     *
+     * @return a {@link GsonComponentSerializer}
+     * @since 4.8.0
+     */
+    @ApiStatus.Internal
+    @NonNull GsonComponentSerializer gson();
+
+    /**
+     * Provides a legacy {@link GsonComponentSerializer}.
+     *
+     * @return a {@link GsonComponentSerializer}
+     * @since 4.8.0
+     */
+    @ApiStatus.Internal
+    @NonNull GsonComponentSerializer gsonLegacy();
   }
 }

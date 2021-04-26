@@ -26,6 +26,7 @@ package net.kyori.adventure.text.serializer.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.BlockNBTComponent;
@@ -35,12 +36,18 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.util.Services;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 final class GsonComponentSerializerImpl implements GsonComponentSerializer {
-  static final GsonComponentSerializer INSTANCE = new GsonComponentSerializerImpl(false, null, false);
-  static final GsonComponentSerializer LEGACY_INSTANCE = new GsonComponentSerializerImpl(true, null, true);
+  private static final Optional<Provider> SERVICE = Services.service(Provider.class);
+  static final GsonComponentSerializer INSTANCE = SERVICE
+    .map(Provider::gson)
+    .orElseGet(() -> new GsonComponentSerializerImpl(false, null, false));
+  static final GsonComponentSerializer LEGACY_INSTANCE = SERVICE
+    .map(Provider::gsonLegacy)
+    .orElseGet(() -> new GsonComponentSerializerImpl(true, null, true));
 
   private final Gson serializer;
   private final UnaryOperator<GsonBuilder> populator;
