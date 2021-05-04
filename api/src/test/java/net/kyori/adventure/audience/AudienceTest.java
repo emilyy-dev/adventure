@@ -24,10 +24,13 @@
 package net.kyori.adventure.audience;
 
 import com.google.common.testing.EqualsTester;
+import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,6 +53,23 @@ class AudienceTest {
     final Audience ma = Audience.audience(a0, a1);
     assertTrue(ma instanceof ForwardingAudience);
     assertThat(((ForwardingAudience) ma).audiences()).containsExactly(a0, a1).inOrder();
+  }
+
+  @Test
+  void testGet() {
+    assertNull(Audience.empty().get(Audience.UUID));
+  }
+
+  @Test
+  void testGetOrDefault() {
+    final UUID uuid = UUID.randomUUID();
+    assertEquals(uuid, Audience.empty().getOrDefault(Audience.UUID, uuid));
+  }
+
+  @Test
+  void testGetOrDefaultFrom() {
+    final UUID uuid = UUID.randomUUID();
+    assertEquals(uuid, Audience.empty().getOrDefaultFrom(Audience.UUID, () -> uuid));
   }
 
   @Test

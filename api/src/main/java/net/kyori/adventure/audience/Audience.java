@@ -24,8 +24,11 @@
 package net.kyori.adventure.audience;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
+import net.kyori.adventure.audience.key.AudienceKey;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.sound.Sound;
@@ -33,8 +36,9 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
-import net.kyori.adventure.identity.Identified;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
 
 /**
  * A receiver of Minecraft media.
@@ -131,6 +135,50 @@ public interface Audience {
    */
   static @NonNull Collector<? super Audience, ?, ForwardingAudience> toAudience() {
     return Audiences.COLLECTOR;
+  }
+
+  /**
+   * Gets the value of {@code key}.
+   *
+   * @param key the key
+   * @param <T> the type
+   * @return the value
+   * @since 4.8.0
+   */
+  default <T> @Nullable T get(final @NonNull AudienceKey<T> key) {
+    return null;
+  }
+
+  /**
+   * Gets the value of {@code key}.
+   *
+   * <p>If this {@code Audience} is unable to provide a value for {@code key}, {@code defaultValue} will be returned.</p>
+   *
+   * @param key the key
+   * @param defaultValue the default value
+   * @param <T> the type
+   * @return the value
+   * @since 4.8.0
+   */
+  @SuppressWarnings("checkstyle:MethodName")
+  default <T> @PolyNull T getOrDefault(final @NonNull AudienceKey<T> key, final @PolyNull T defaultValue) {
+    return defaultValue;
+  }
+
+  /**
+   * Gets the value of {@code key}.
+   *
+   * <p>If this {@code Audience} is unable to provide a value for {@code key}, the value supplied by {@code defaultValue} will be returned.</p>
+   *
+   * @param key the key
+   * @param defaultValue the default value supplier
+   * @param <T> the type
+   * @return the value
+   * @since 4.8.0
+   */
+  @SuppressWarnings("checkstyle:MethodName")
+  default <T> @PolyNull T getOrDefaultFrom(final @NonNull AudienceKey<T> key, final @NonNull Supplier<? extends T> defaultValue) {
+    return defaultValue.get();
   }
 
   /**
