@@ -34,6 +34,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @since 4.8.0
  */
 public final class Services {
+  private static final boolean SERVICE_LOAD_FAILURES_ARE_FATAL = Boolean.parseBoolean(System.getProperty(String.join(".", "net", "kyori", "adventure", "serviceLoadFailuresAreFatal"), String.valueOf(true)));
+
   private Services() {
   }
 
@@ -49,15 +51,20 @@ public final class Services {
     final ServiceLoader<P> loader = Services0.loader(type);
     final Iterator<P> it = loader.iterator();
     while(it.hasNext()) {
+      final P provider;
       try {
-        final P provider = it.next();
-        if(it.hasNext()) {
-          throw new IllegalStateException("Expected to find one " + type + " service provider, found multiple");
-        }
-        return Optional.of(provider);
+        provider = it.next();
       } catch(final Throwable t) {
-        // ignored
+        if(SERVICE_LOAD_FAILURES_ARE_FATAL) {
+          throw new IllegalStateException("Encountered an exception loading service " + type, t);
+        } else {
+          continue;
+        }
       }
+      if(it.hasNext()) {
+        throw new IllegalStateException("Expected to find one " + type + " service provider, found multiple");
+      }
+      return Optional.of(provider);
     }
     return Optional.empty();
   }
