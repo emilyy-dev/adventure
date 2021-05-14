@@ -183,16 +183,6 @@ public interface ForwardingAudience extends Audience {
     }
 
     @Override
-    default <T> @PolyNull T getOrDefault(final @NonNull AudienceKey<T> key, @PolyNull final T defaultValue) {
-      return this.audience().getOrDefault(key, defaultValue);
-    }
-
-    @Override
-    default <T> @PolyNull T getOrDefaultFrom(final @NonNull AudienceKey<T> key, final @NonNull Supplier<? extends T> defaultValue) {
-      return this.audience().getOrDefaultFrom(key, defaultValue);
-    }
-
-    @Override
     default void sendMessage(final @NonNull Identified source, final @NonNull Component message, final @NonNull MessageType type) {
       this.audience().sendMessage(source, message, type);
     }

@@ -1,6 +1,7 @@
 package net.kyori.adventure.audience.key;
 
 import java.util.UUID;
+import net.kyori.adventure.audience.support.HasPermission;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 
@@ -36,6 +37,13 @@ public final class AudienceKeys {
    * @since 4.8.0
    */
   public static final AudienceKey<UUID> UUID = audienceKey(UUID.class, Key.key("adventure", "uuid"));
+
+  /**
+   * A permission predicate.
+   *
+   * @since 4.8.0
+   */
+  public static final AudienceKey<HasPermission> HAS_PERMISSION = audienceKey(HasPermission.class, Key.key("adventure", "has_permission"));
 
   private AudienceKeys() {
   }

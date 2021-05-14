@@ -38,7 +38,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 
 /**
@@ -163,7 +162,7 @@ public interface Audience {
    */
   @SuppressWarnings("checkstyle:MethodName")
   default <T> @PolyNull T getOrDefault(final @NonNull AudienceKey<T> key, final @PolyNull T defaultValue) {
-    return defaultValue;
+    return this.get(key).orElse(defaultValue);
   }
 
   /**
@@ -179,7 +178,7 @@ public interface Audience {
    */
   @SuppressWarnings("checkstyle:MethodName")
   default <T> @PolyNull T getOrDefaultFrom(final @NonNull AudienceKey<T> key, final @NonNull Supplier<? extends T> defaultValue) {
-    return defaultValue.get();
+    return this.get(key).orElseGet(defaultValue);
   }
 
   /**
