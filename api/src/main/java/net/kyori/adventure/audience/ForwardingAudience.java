@@ -24,6 +24,7 @@
 package net.kyori.adventure.audience;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.Supplier;
 import net.kyori.adventure.audience.key.AudienceKey;
 import net.kyori.adventure.bossbar.BossBar;
@@ -60,8 +61,8 @@ public interface ForwardingAudience extends Audience {
   @NonNull Iterable<? extends Audience> audiences();
 
   @Override
-  default <T> @Nullable T get(final @NonNull AudienceKey<T> key) {
-    return null; // unsupported
+  default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
+    return Optional.empty(); // unsupported
   }
 
   @Override
@@ -177,7 +178,7 @@ public interface ForwardingAudience extends Audience {
     }
 
     @Override
-    default <T> @Nullable T get(final @NonNull AudienceKey<T> key) {
+    default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
       return this.audience().get(key);
     }
 

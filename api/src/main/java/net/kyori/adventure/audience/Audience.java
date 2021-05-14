@@ -24,6 +24,7 @@
 package net.kyori.adventure.audience;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import net.kyori.adventure.audience.key.AudienceKey;
@@ -145,8 +146,8 @@ public interface Audience {
    * @return the value
    * @since 4.8.0
    */
-  default <T> @Nullable T get(final @NonNull AudienceKey<T> key) {
-    return null;
+  default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
+    return Optional.empty();
   }
 
   /**
