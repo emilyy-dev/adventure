@@ -24,9 +24,6 @@
 package net.kyori.adventure.audience;
 
 import java.util.Collections;
-import java.util.Optional;
-import java.util.function.Supplier;
-import net.kyori.adventure.audience.key.AudienceKey;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
@@ -36,8 +33,6 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -59,21 +54,6 @@ public interface ForwardingAudience extends Audience {
    */
   @ApiStatus.OverrideOnly
   @NonNull Iterable<? extends Audience> audiences();
-
-  @Override
-  default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
-    return Optional.empty(); // unsupported
-  }
-
-  @Override
-  default <T> @PolyNull T getOrDefault(final @NonNull AudienceKey<T> key, @PolyNull final T defaultValue) {
-    return defaultValue; // unsupported
-  }
-
-  @Override
-  default <T> @PolyNull T getOrDefaultFrom(final @NonNull AudienceKey<T> key, final @NonNull Supplier<? extends T> defaultValue) {
-    return defaultValue.get(); // unsupported
-  }
 
   @Override
   default void sendMessage(final @NonNull Identified source, final @NonNull Component message, final @NonNull MessageType type) {
@@ -175,11 +155,6 @@ public interface ForwardingAudience extends Audience {
     @Override
     default @NonNull Iterable<? extends Audience> audiences() {
       return Collections.singleton(this.audience());
-    }
-
-    @Override
-    default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
-      return this.audience().get(key);
     }
 
     @Override

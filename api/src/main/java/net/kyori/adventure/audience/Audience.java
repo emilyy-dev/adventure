@@ -138,50 +138,6 @@ public interface Audience {
   }
 
   /**
-   * Gets the value of {@code key}.
-   *
-   * @param key the key
-   * @param <T> the type
-   * @return the value
-   * @since 4.8.0
-   */
-  default <T> @NonNull Optional<T> get(final @NonNull AudienceKey<T> key) {
-    return Optional.empty();
-  }
-
-  /**
-   * Gets the value of {@code key}.
-   *
-   * <p>If this {@code Audience} is unable to provide a value for {@code key}, {@code defaultValue} will be returned.</p>
-   *
-   * @param key the key
-   * @param defaultValue the default value
-   * @param <T> the type
-   * @return the value
-   * @since 4.8.0
-   */
-  @SuppressWarnings("checkstyle:MethodName")
-  default <T> @PolyNull T getOrDefault(final @NonNull AudienceKey<T> key, final @PolyNull T defaultValue) {
-    return this.get(key).orElse(defaultValue);
-  }
-
-  /**
-   * Gets the value of {@code key}.
-   *
-   * <p>If this {@code Audience} is unable to provide a value for {@code key}, the value supplied by {@code defaultValue} will be returned.</p>
-   *
-   * @param key the key
-   * @param defaultValue the default value supplier
-   * @param <T> the type
-   * @return the value
-   * @since 4.8.0
-   */
-  @SuppressWarnings("checkstyle:MethodName")
-  default <T> @PolyNull T getOrDefaultFrom(final @NonNull AudienceKey<T> key, final @NonNull Supplier<? extends T> defaultValue) {
-    return this.get(key).orElseGet(defaultValue);
-  }
-
-  /**
    * Sends a chat message with a {@link Identity#nil() nil} identity to this {@link Audience}.
    *
    * @param message a message
